@@ -1,92 +1,180 @@
+# Re-import and re-create the final zip due to environment reset
+
+import matplotlib.pyplot as plt
+import zipfile
+
+# Re-create all charts
+# 1. Monthly budget pie chart
+labels = ['Rent + Bills', 'Food', 'Transport', 'Savings', 'Fun/Extras', 'Phone/Internet']
+amounts = [700, 250, 100, 300, 150, 100]
+
+plt.figure(figsize=(6, 6))
+plt.pie(amounts, labels=labels, autopct='%1.1f%%', startangle=140)
+plt.title('Monthly Budget Breakdown')
+plt.tight_layout()
+pie_path = "/mnt/data/monthly_budget_pie_chart.png"
+plt.savefig(pie_path)
+plt.close()
+
+# 2. Savings goals
+labels = ['Gaming Setup', 'Used Car', 'Future House/Investments']
+amounts = [500, 5000, 20000]
+colors = ['#4caf50', '#2196f3', '#9c27b0']
+
+plt.figure(figsize=(8, 5))
+plt.bar(labels, amounts, color=colors)
+plt.title('Savings Goals Timeline')
+plt.ylabel('Amount ($)')
+plt.tight_layout()
+savings_path = "/mnt/data/savings_goals_chart.png"
+plt.savefig(savings_path)
+plt.close()
+
+# 3. Income options
+x = range(3)
+labels = ['Freelancer', 'Game Designer', 'Teacher']
+pros = [3, 4, 4]
+cons = [3, 4, 3]
+width = 0.35
+
+plt.figure(figsize=(8, 5))
+plt.bar(x, pros, width, label='Pros', color='#4caf50')
+plt.bar([i + width for i in x], cons, width, label='Cons', color='#f44336')
+plt.xticks([i + width / 2 for i in x], labels)
+plt.title('Income Options: Pros vs Cons')
+plt.ylabel('Rating')
+plt.legend()
+plt.tight_layout()
+income_path = "/mnt/data/income_options_chart.png"
+plt.savefig(income_path)
+plt.close()
+
+# 4. Investment chart
+x = range(2)
+labels = ['Stocks', 'TFSA']
+risks = [9, 2]
+rewards = [8, 4]
+
+plt.figure(figsize=(6, 5))
+plt.bar(x, rewards, width, label='Potential Return', color='#2196f3')
+plt.bar([i + width for i in x], risks, width, label='Risk Level', color='#e91e63')
+plt.xticks([i + width / 2 for i in x], labels)
+plt.title('Investment Risk vs Reward')
+plt.ylabel('Scale (1-10)')
+plt.legend()
+plt.tight_layout()
+investment_path = "/mnt/data/investment_chart.png"
+plt.savefig(investment_path)
+plt.close()
+
+# Build HTML file
+html_file = "/mnt/data/index.html"
+html_template = f"""
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>My Money Story</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body {
-            margin: 0;
-            font-family: 'Inter', sans-serif;
-            background: linear-gradient(to right, #e0f7fa, #ffffff);
-            color: #333;
-        }
-        header {
-            background-color: #00796b;
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-        .container {
-            padding: 2rem;
-            max-width: 1000px;
-            margin: auto;
-        }
-        section {
-            margin-bottom: 3rem;
-        }
-        h1, h2 {
-            color: #004d40;
-        }
-        .chart {
-            display: flex;
-            justify-content: center;
-            margin-top: 2rem;
-        }
-        img {
-            max-width: 100%;
-            height: auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        }
-        .box {
-            background: #ffffff;
-            padding: 1.5rem;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Financial Literacy 10 Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet"/>
+  <style>
+    body {{
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(to bottom right, #e3f2fd, #fce4ec);
+      color: #333;
+    }}
+    header {{
+      background-color: #283593;
+      color: white;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    }}
+    .container {{
+      padding: 2rem;
+      max-width: 960px;
+      margin: auto;
+    }}
+    .box {{
+      background: white;
+      margin: 1.5rem 0;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }}
+    h2 {{
+      color: #1565c0;
+    }}
+    .chart, .image {{
+      text-align: center;
+      margin-top: 1rem;
+    }}
+    img {{
+      max-width: 100%;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }}
+  </style>
 </head>
 <body>
-    <header>
-        <h1>My Money Story</h1>
-        <p>Smart money habits to stay balanced and financially stable</p>
-    </header>
-    <div class="container">
-        <section class="box">
-            <h2>Understanding the Mental Side of Money</h2>
-            <p>Money can really affect how we feel. Stressing over bills or not having enough can lead to anxiety and poor decision-making. That’s why I created a simple system to stay on track — one that keeps me mentally healthy and financially sound.</p>
-        </section>
-
-        <section class="box">
-            <h2>My Monthly Budget Plan ($1,600/month)</h2>
-            <ul>
-                <li><strong>Rent + Bills:</strong> $700 – A small, affordable place</li>
-                <li><strong>Food:</strong> $250 – Groceries and occasional eating out</li>
-                <li><strong>Transport:</strong> $100 – Gas or public transport</li>
-                <li><strong>Savings:</strong> $300 – For emergencies and future needs</li>
-                <li><strong>Fun/Extras:</strong> $150 – Entertainment, snacks, clothes</li>
-                <li><strong>Phone/Internet:</strong> $100 – Essentials to stay connected</li>
-            </ul>
-            <div class="chart">
-                <img src="monthly_budget_pie_chart.png" alt="Budget Pie Chart">
-            </div>
-        </section>
-
-        <section class="box">
-            <h2>Habits That Keep Me Going</h2>
-            <ul>
-                <li><strong>Budgeting:</strong> Writing down income and expenses brings control.</li>
-                <li><strong>Saving:</strong> Even small amounts grow over time.</li>
-                <li><strong>Mental Breaks:</strong> Music, walks, or games to reduce money anxiety.</li>
-            </ul>
-        </section>
-
-        <section class="box">
-            <h2>Why It Works</h2>
-            <p>Because it’s realistic. I keep expenses low, save regularly, and stay in control emotionally. When I feel stable mentally, I make better money choices and avoid falling into harmful spending habits or risky situations.</p>
-        </section>
+  <header>
+    <h1>Financial Literacy 10 Portfolio</h1>
+    <p>My Personal Journey with Money, Goals, and Growth</p>
+  </header>
+  <div class="container">
+    <div class="box">
+      <h2>FL10.5 – Budgeting Exercise</h2>
+      <p>Sample budget with essential expenses and savings plan.</p>
+      <div class="chart">
+        <img src="monthly_budget_pie_chart.png" alt="Budget Pie Chart">
+      </div>
     </div>
+    <div class="box">
+      <h2>FL10.6 – Savings Strategy</h2>
+      <p>Timeline with short, medium, and long-term financial goals.</p>
+      <div class="chart">
+        <img src="savings_goals_chart.png" alt="Savings Goals Chart">
+      </div>
+    </div>
+    <div class="box">
+      <h2>FL10.4 – Income Options</h2>
+      <p>Freelancer, Game Developer, Teacher – comparing benefits and drawbacks.</p>
+      <div class="chart">
+        <img src="income_options_chart.png" alt="Income Options Chart">
+      </div>
+    </div>
+    <div class="box">
+      <h2>FL10.7 – Investment Overview</h2>
+      <p>Risk vs Reward: TFSA vs Stocks.</p>
+      <div class="chart">
+        <img src="investment_chart.png" alt="Investment Chart">
+      </div>
+    </div>
+    <div class="box">
+      <h2>FL10.10 – Future Aspirations Plan</h2>
+      <p>A glimpse of who I might become!</p>
+      <div class="image">
+        <img src="Snapchat-1143571254.jpg" alt="Future Me Filter">
+      </div>
+    </div>
+  </div>
 </body>
 </html>
+"""
+
+# Write HTML file
+with open(html_file, "w") as f:
+    f.write(html_template)
+
+# Generate ZIP with HTML + images
+zip_path = "/mnt/data/Financial_Literacy_Portfolio.zip"
+with zipfile.ZipFile(zip_path, "w") as zipf:
+    zipf.write(html_file, arcname="index.html")
+    zipf.write(pie_path, arcname="monthly_budget_pie_chart.png")
+    zipf.write(savings_path, arcname="savings_goals_chart.png")
+    zipf.write(income_path, arcname="income_options_chart.png")
+    zipf.write(investment_path, arcname="investment_chart.png")
+
+# Notify path
+zip_path
